@@ -105,7 +105,7 @@ const Sidebar: React.FC = () => {
       <div className="p-4 border-t border-border">
         <div className="card-elevated p-3 bg-muted/30">
           <p className="text-xs text-muted-foreground mb-1">Today's Sales</p>
-          <p className="text-lg font-semibold text-foreground">₹3,41,750</p>
+          <p className="text-lg font-semibold text-foreground">Rs3,41,750</p>
           <p className="text-xs text-success">↑ 12% from yesterday</p>
         </div>
       </div>

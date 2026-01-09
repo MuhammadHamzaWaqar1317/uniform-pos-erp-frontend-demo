@@ -1,7 +1,30 @@
-import React from 'react';
-import { TrendingUp, TrendingDown, DollarSign, Package, ShoppingCart, Users } from 'lucide-react';
-import { generateDailySales, generateWeeklySales, topItems, lowStockItems, branches } from '@/data/mockData';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import React from "react";
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Package,
+  ShoppingCart,
+  Users,
+} from "lucide-react";
+import {
+  generateDailySales,
+  generateWeeklySales,
+  topItems,
+  lowStockItems,
+  branches,
+} from "@/data/mockData";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
 
 const Reports: React.FC = () => {
   const dailySales = generateDailySales();
@@ -9,14 +32,19 @@ const Reports: React.FC = () => {
 
   const totalWeeklySales = weeklySales.reduce((sum, d) => sum + d.sales, 0);
   const avgDailySales = totalWeeklySales / 7;
-  const bestDay = weeklySales.reduce((max, d) => d.sales > max.sales ? d : max, weeklySales[0]);
+  const bestDay = weeklySales.reduce(
+    (max, d) => (d.sales > max.sales ? d : max),
+    weeklySales[0]
+  );
 
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground">Reports</h1>
-        <p className="text-muted-foreground">Analytics and insights for your uniform business</p>
+        <p className="text-muted-foreground">
+          Analytics and insights for your uniform business
+        </p>
       </div>
 
       {/* Summary Stats */}
@@ -31,7 +59,9 @@ const Reports: React.FC = () => {
               +12.5%
             </span>
           </div>
-          <p className="text-2xl font-bold text-foreground">₹{totalWeeklySales.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-foreground">
+            Rs{totalWeeklySales.toLocaleString()}
+          </p>
           <p className="text-sm text-muted-foreground">Weekly Revenue</p>
         </div>
 
@@ -45,7 +75,9 @@ const Reports: React.FC = () => {
               +8.2%
             </span>
           </div>
-          <p className="text-2xl font-bold text-foreground">₹{Math.round(avgDailySales).toLocaleString()}</p>
+          <p className="text-2xl font-bold text-foreground">
+            Rs{Math.round(avgDailySales).toLocaleString()}
+          </p>
           <p className="text-sm text-muted-foreground">Avg Daily Sales</p>
         </div>
 
@@ -56,7 +88,9 @@ const Reports: React.FC = () => {
             </div>
             <span className="badge-success">{bestDay.date}</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">₹{bestDay.sales.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-foreground">
+            Rs{bestDay.sales.toLocaleString()}
+          </p>
           <p className="text-sm text-muted-foreground">Best Day This Week</p>
         </div>
 
@@ -70,7 +104,9 @@ const Reports: React.FC = () => {
               -2.1%
             </span>
           </div>
-          <p className="text-2xl font-bold text-foreground">{branches.length}</p>
+          <p className="text-2xl font-bold text-foreground">
+            {branches.length}
+          </p>
           <p className="text-sm text-muted-foreground">Active Branches</p>
         </div>
       </div>
@@ -81,40 +117,48 @@ const Reports: React.FC = () => {
         <div className="card-elevated p-6">
           <div className="mb-6">
             <h3 className="font-semibold text-foreground">Daily Sales Trend</h3>
-            <p className="text-sm text-muted-foreground">Last 30 days performance</p>
+            <p className="text-sm text-muted-foreground">
+              Last 30 days performance
+            </p>
           </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={dailySales}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--border))"
+                />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
                   interval="preserveStartEnd"
                 />
-                <YAxis 
-                  tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                <YAxis
+                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                  tickFormatter={(value) => `Rs${(value / 1000).toFixed(0)}k`}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Sales']}
+                  formatter={(value: number) => [
+                    `Rs${value.toLocaleString()}`,
+                    "Sales",
+                  ]}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="sales" 
-                  stroke="hsl(var(--primary))" 
+                <Line
+                  type="monotone"
+                  dataKey="sales"
+                  stroke="hsl(var(--primary))"
                   strokeWidth={2}
                   dot={false}
-                  activeDot={{ r: 6, fill: 'hsl(var(--primary))' }}
+                  activeDot={{ r: 6, fill: "hsl(var(--primary))" }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -125,35 +169,44 @@ const Reports: React.FC = () => {
         <div className="card-elevated p-6">
           <div className="mb-6">
             <h3 className="font-semibold text-foreground">Weekly Sales</h3>
-            <p className="text-sm text-muted-foreground">This week's performance by day</p>
+            <p className="text-sm text-muted-foreground">
+              This week's performance by day
+            </p>
           </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={weeklySales}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--border))"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
                 />
-                <YAxis 
-                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                <YAxis
+                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                  tickFormatter={(value) => `Rs${(value / 1000).toFixed(0)}k`}
                 />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Sales']}
+                  formatter={(value: number) => [
+                    `Rs${value.toLocaleString()}`,
+                    "Sales",
+                  ]}
                 />
-                <Bar 
-                  dataKey="sales" 
-                  fill="hsl(var(--accent))" 
+                <Bar
+                  dataKey="sales"
+                  fill="hsl(var(--accent))"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
@@ -167,8 +220,12 @@ const Reports: React.FC = () => {
         {/* Top 5 Items */}
         <div className="card-elevated p-6">
           <div className="mb-4">
-            <h3 className="font-semibold text-foreground">Top 5 Selling Items</h3>
-            <p className="text-sm text-muted-foreground">Best performers this month</p>
+            <h3 className="font-semibold text-foreground">
+              Top 5 Selling Items
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Best performers this month
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -190,9 +247,15 @@ const Reports: React.FC = () => {
                       </span>
                     </td>
                     <td className="table-cell py-3 font-medium">{item.name}</td>
-                    <td className="table-cell py-3 text-muted-foreground text-sm">{item.category}</td>
-                    <td className="table-cell py-3 text-right">{item.unitsSold}</td>
-                    <td className="table-cell py-3 text-right font-semibold">₹{(item.revenue / 1000).toFixed(0)}k</td>
+                    <td className="table-cell py-3 text-muted-foreground text-sm">
+                      {item.category}
+                    </td>
+                    <td className="table-cell py-3 text-right">
+                      {item.unitsSold}
+                    </td>
+                    <td className="table-cell py-3 text-right font-semibold">
+                      Rs{(item.revenue / 1000).toFixed(0)}k
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -204,7 +267,9 @@ const Reports: React.FC = () => {
         <div className="card-elevated p-6">
           <div className="mb-4">
             <h3 className="font-semibold text-foreground">Low Stock Alerts</h3>
-            <p className="text-sm text-muted-foreground">Items requiring attention</p>
+            <p className="text-sm text-muted-foreground">
+              Items requiring attention
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -221,11 +286,17 @@ const Reports: React.FC = () => {
                 {lowStockItems.slice(0, 5).map((item) => (
                   <tr key={item.id} className="border-b border-border">
                     <td className="table-cell py-3 font-medium">{item.name}</td>
-                    <td className="table-cell py-3 text-muted-foreground text-xs font-mono">{item.sku}</td>
-                    <td className="table-cell py-3 text-sm text-muted-foreground">{item.branch}</td>
-                    <td className="table-cell py-3 text-right font-semibold text-warning">{item.stock}</td>
+                    <td className="table-cell py-3 text-muted-foreground text-xs font-mono">
+                      {item.sku}
+                    </td>
+                    <td className="table-cell py-3 text-sm text-muted-foreground">
+                      {item.branch}
+                    </td>
+                    <td className="table-cell py-3 text-right font-semibold text-warning">
+                      {item.stock}
+                    </td>
                     <td className="table-cell py-3 text-right">
-                      {item.status === 'out-of-stock' ? (
+                      {item.status === "out-of-stock" ? (
                         <span className="badge-danger">Out</span>
                       ) : (
                         <span className="badge-warning">Low</span>

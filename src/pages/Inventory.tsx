@@ -1,18 +1,29 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Filter, Package, AlertTriangle, ArrowUpDown } from 'lucide-react';
-import { inventoryItems, categories, branches, InventoryItem } from '@/data/mockData';
+import React, { useState, useMemo } from "react";
+import {
+  Search,
+  Filter,
+  Package,
+  AlertTriangle,
+  ArrowUpDown,
+} from "lucide-react";
+import {
+  inventoryItems,
+  categories,
+  branches,
+  InventoryItem,
+} from "@/data/mockData";
 
-type StatusFilter = 'all' | 'in-stock' | 'low-stock' | 'out-of-stock';
-type SortField = 'name' | 'stock' | 'price' | 'category';
-type SortOrder = 'asc' | 'desc';
+type StatusFilter = "all" | "in-stock" | "low-stock" | "out-of-stock";
+type SortField = "name" | "stock" | "price" | "category";
+type SortOrder = "asc" | "desc";
 
 const Inventory: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [branchFilter, setBranchFilter] = useState<string>('all');
-  const [sortField, setSortField] = useState<SortField>('name');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [branchFilter, setBranchFilter] = useState<string>("all");
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
   const filteredItems = useMemo(() => {
     let items = [...inventoryItems];
@@ -20,76 +31,85 @@ const Inventory: React.FC = () => {
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      items = items.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.sku.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query)
+      items = items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          item.sku.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query)
       );
     }
 
     // Category filter
-    if (categoryFilter !== 'all') {
-      items = items.filter(item => item.category === categoryFilter);
+    if (categoryFilter !== "all") {
+      items = items.filter((item) => item.category === categoryFilter);
     }
 
     // Status filter
-    if (statusFilter !== 'all') {
-      items = items.filter(item => item.status === statusFilter);
+    if (statusFilter !== "all") {
+      items = items.filter((item) => item.status === statusFilter);
     }
 
     // Branch filter
-    if (branchFilter !== 'all') {
-      items = items.filter(item => item.branch === branchFilter);
+    if (branchFilter !== "all") {
+      items = items.filter((item) => item.branch === branchFilter);
     }
 
     // Sorting
     items.sort((a, b) => {
       let comparison = 0;
       switch (sortField) {
-        case 'name':
+        case "name":
           comparison = a.name.localeCompare(b.name);
           break;
-        case 'stock':
+        case "stock":
           comparison = a.stock - b.stock;
           break;
-        case 'price':
+        case "price":
           comparison = a.price - b.price;
           break;
-        case 'category':
+        case "category":
           comparison = a.category.localeCompare(b.category);
           break;
       }
-      return sortOrder === 'asc' ? comparison : -comparison;
+      return sortOrder === "asc" ? comparison : -comparison;
     });
 
     return items;
-  }, [searchQuery, categoryFilter, statusFilter, branchFilter, sortField, sortOrder]);
+  }, [
+    searchQuery,
+    categoryFilter,
+    statusFilter,
+    branchFilter,
+    sortField,
+    sortOrder,
+  ]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortOrder('asc');
+      setSortOrder("asc");
     }
   };
 
-  const getStatusBadge = (status: InventoryItem['status']) => {
+  const getStatusBadge = (status: InventoryItem["status"]) => {
     switch (status) {
-      case 'in-stock':
+      case "in-stock":
         return <span className="badge-success">In Stock</span>;
-      case 'low-stock':
+      case "low-stock":
         return <span className="badge-warning">Low Stock</span>;
-      case 'out-of-stock':
+      case "out-of-stock":
         return <span className="badge-danger">Out of Stock</span>;
     }
   };
 
   const stats = {
     total: inventoryItems.length,
-    inStock: inventoryItems.filter(i => i.status === 'in-stock').length,
-    lowStock: inventoryItems.filter(i => i.status === 'low-stock').length,
-    outOfStock: inventoryItems.filter(i => i.status === 'out-of-stock').length,
+    inStock: inventoryItems.filter((i) => i.status === "in-stock").length,
+    lowStock: inventoryItems.filter((i) => i.status === "low-stock").length,
+    outOfStock: inventoryItems.filter((i) => i.status === "out-of-stock")
+      .length,
   };
 
   return (
@@ -98,7 +118,9 @@ const Inventory: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Inventory</h1>
-          <p className="text-muted-foreground">Manage and track all uniform items</p>
+          <p className="text-muted-foreground">
+            Manage and track all uniform items
+          </p>
         </div>
       </div>
 
@@ -108,8 +130,12 @@ const Inventory: React.FC = () => {
           <AlertTriangle className="h-5 w-5 text-warning" />
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium text-foreground">Low stock alert sent to admin at 9:00 AM</p>
-          <p className="text-xs text-muted-foreground">{stats.lowStock + stats.outOfStock} items need attention</p>
+          <p className="text-sm font-medium text-foreground">
+            Low stock alert sent to admin at 9:00 AM
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {stats.lowStock + stats.outOfStock} items need attention
+          </p>
         </div>
       </div>
 
@@ -121,7 +147,9 @@ const Inventory: React.FC = () => {
               <Package className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">{stats.total}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {stats.total}
+              </p>
               <p className="text-sm text-muted-foreground">Total Items</p>
             </div>
           </div>
@@ -132,7 +160,9 @@ const Inventory: React.FC = () => {
               <Package className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">{stats.inStock}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {stats.inStock}
+              </p>
               <p className="text-sm text-muted-foreground">In Stock</p>
             </div>
           </div>
@@ -143,7 +173,9 @@ const Inventory: React.FC = () => {
               <Package className="h-5 w-5 text-warning" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">{stats.lowStock}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {stats.lowStock}
+              </p>
               <p className="text-sm text-muted-foreground">Low Stock</p>
             </div>
           </div>
@@ -154,7 +186,9 @@ const Inventory: React.FC = () => {
               <Package className="h-5 w-5 text-destructive" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">{stats.outOfStock}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {stats.outOfStock}
+              </p>
               <p className="text-sm text-muted-foreground">Out of Stock</p>
             </div>
           </div>
@@ -184,7 +218,9 @@ const Inventory: React.FC = () => {
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
             ))}
           </select>
 
@@ -208,7 +244,9 @@ const Inventory: React.FC = () => {
           >
             <option value="all">All Branches</option>
             {branches.map((branch) => (
-              <option key={branch.id} value={branch.name}>{branch.name}</option>
+              <option key={branch.id} value={branch.name}>
+                {branch.name}
+              </option>
             ))}
           </select>
         </div>
@@ -222,7 +260,7 @@ const Inventory: React.FC = () => {
               <tr className="border-b border-border">
                 <th className="table-header px-4 py-3">
                   <button
-                    onClick={() => handleSort('name')}
+                    onClick={() => handleSort("name")}
                     className="flex items-center gap-1 hover:text-foreground"
                   >
                     Item Name
@@ -232,7 +270,7 @@ const Inventory: React.FC = () => {
                 <th className="table-header px-4 py-3">SKU</th>
                 <th className="table-header px-4 py-3">
                   <button
-                    onClick={() => handleSort('category')}
+                    onClick={() => handleSort("category")}
                     className="flex items-center gap-1 hover:text-foreground"
                   >
                     Category
@@ -242,7 +280,7 @@ const Inventory: React.FC = () => {
                 <th className="table-header px-4 py-3">Size</th>
                 <th className="table-header px-4 py-3">
                   <button
-                    onClick={() => handleSort('price')}
+                    onClick={() => handleSort("price")}
                     className="flex items-center gap-1 hover:text-foreground"
                   >
                     Price
@@ -251,7 +289,7 @@ const Inventory: React.FC = () => {
                 </th>
                 <th className="table-header px-4 py-3">
                   <button
-                    onClick={() => handleSort('stock')}
+                    onClick={() => handleSort("stock")}
                     className="flex items-center gap-1 hover:text-foreground"
                   >
                     Stock
@@ -264,26 +302,37 @@ const Inventory: React.FC = () => {
             </thead>
             <tbody>
               {filteredItems.map((item, index) => (
-                <tr 
+                <tr
                   key={item.id}
                   className={`border-b border-border hover:bg-muted/30 transition-colors ${
-                    index % 2 === 0 ? 'bg-card' : 'bg-muted/10'
+                    index % 2 === 0 ? "bg-card" : "bg-muted/10"
                   }`}
                 >
                   <td className="table-cell font-medium">{item.name}</td>
-                  <td className="table-cell text-muted-foreground font-mono text-xs">{item.sku}</td>
+                  <td className="table-cell text-muted-foreground font-mono text-xs">
+                    {item.sku}
+                  </td>
                   <td className="table-cell">{item.category}</td>
                   <td className="table-cell">{item.size}</td>
-                  <td className="table-cell font-medium">₹{item.price.toLocaleString()}</td>
+                  <td className="table-cell font-medium">
+                    Rs{item.price.toLocaleString()}
+                  </td>
                   <td className="table-cell">
-                    <span className={`font-medium ${
-                      item.stock === 0 ? 'text-destructive' :
-                      item.stock < 10 ? 'text-warning' : 'text-foreground'
-                    }`}>
+                    <span
+                      className={`font-medium ${
+                        item.stock === 0
+                          ? "text-destructive"
+                          : item.stock < 10
+                          ? "text-warning"
+                          : "text-foreground"
+                      }`}
+                    >
                       {item.stock}
                     </span>
                   </td>
-                  <td className="table-cell text-muted-foreground text-sm">{item.branch}</td>
+                  <td className="table-cell text-muted-foreground text-sm">
+                    {item.branch}
+                  </td>
                   <td className="table-cell">{getStatusBadge(item.status)}</td>
                 </tr>
               ))}
@@ -297,8 +346,12 @@ const Inventory: React.FC = () => {
             Showing {filteredItems.length} of {inventoryItems.length} items
           </p>
           <div className="flex items-center gap-2">
-            <button className="btn-ghost text-sm py-1.5 px-3" disabled>Previous</button>
-            <button className="btn-ghost text-sm py-1.5 px-3" disabled>Next</button>
+            <button className="btn-ghost text-sm py-1.5 px-3" disabled>
+              Previous
+            </button>
+            <button className="btn-ghost text-sm py-1.5 px-3" disabled>
+              Next
+            </button>
           </div>
         </div>
       </div>
